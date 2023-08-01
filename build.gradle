@@ -27,6 +27,9 @@ plugins {
 
 apply plugin: 'io.spring.nohttp'
 
+apply plugin: 'java'
+apply plugin: 'maven'
+
 def gitPresent = new File('.git').exists()
 
 if(gitPresent) {
@@ -140,10 +143,10 @@ subprojects { subproject ->
 		targetCompatibility = 1.8
 	}
 
-	compileTestJava {
-		sourceCompatibility = 11
-		options.encoding = 'UTF-8'
-	}
+//	compileTestJava {
+//		sourceCompatibility = 11
+//		options.encoding = 'UTF-8'
+//	}
 
 	compileTestKotlin {
 		kotlinOptions {
@@ -179,7 +182,7 @@ subprojects { subproject ->
 	}
 
 	// enable all compiler warnings; individual projects may customize further
-	[compileJava, compileTestJava]*.options*.compilerArgs = ['-Xlint:all,-options']
+//	[compileJava, compileTestJava]*.options*.compilerArgs = ['-Xlint:all,-options']
 
 	test {
 		testLogging {
@@ -325,64 +328,64 @@ project ('spring-kafka') {
 		optionalApi 'io.projectreactor.kafka:reactor-kafka'
 		optionalApi "io.micrometer:micrometer-core:$micrometerVersion"
 
-		testImplementation project (':spring-kafka-test')
+//		testImplementation project (':spring-kafka-test')
 		testImplementation 'io.projectreactor:reactor-test'
 		testImplementation "org.mockito:mockito-junit-jupiter:$mockitoVersion"
 		testImplementation "org.hibernate.validator:hibernate-validator:$hibernateValidationVersion"
 	}
 }
 
-project ('spring-kafka-test') {
-	description = 'Spring Kafka Test Support'
+//project ('spring-kafka-test') {
+//	description = 'Spring Kafka Test Support'
+//
+//	dependencies {
+//		api 'org.springframework:spring-context'
+//		api 'org.springframework:spring-test'
+//		api ("org.springframework.retry:spring-retry:$springRetryVersion") {
+//			exclude group: 'org.springframework'
+//		}
+//
+//		api ("org.apache.zookeeper:zookeeper:$zookeeperVersion") {
+//			exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+//			exclude group: 'log4j'
+//		}
+//		api "org.apache.kafka:kafka-clients:$kafkaVersion:test"
+//		api "org.apache.kafka:kafka-metadata:$kafkaVersion"
+//		api "org.apache.kafka:kafka-streams-test-utils:$kafkaVersion"
+//		api "org.apache.kafka:kafka_$scalaVersion:$kafkaVersion"
+//		api "org.apache.kafka:kafka_$scalaVersion:$kafkaVersion:test"
+//		api 'org.junit.jupiter:junit-jupiter-api'
+//		optionalApi "org.hamcrest:hamcrest-core:$hamcrestVersion"
+//		optionalApi "org.mockito:mockito-core:$mockitoVersion"
+//		optionalApi ("junit:junit:$junit4Version") {
+//			exclude group: 'org.hamcrest', module: 'hamcrest-core'
+//		}
+//		optionalApi "org.apache.logging.log4j:log4j-core:$log4jVersion"
+//	}
+//}
 
-	dependencies {
-		api 'org.springframework:spring-context'
-		api 'org.springframework:spring-test'
-		api ("org.springframework.retry:spring-retry:$springRetryVersion") {
-			exclude group: 'org.springframework'
-		}
-
-		api ("org.apache.zookeeper:zookeeper:$zookeeperVersion") {
-			exclude group: 'org.slf4j', module: 'slf4j-log4j12'
-			exclude group: 'log4j'
-		}
-		api "org.apache.kafka:kafka-clients:$kafkaVersion:test"
-		api "org.apache.kafka:kafka-metadata:$kafkaVersion"
-		api "org.apache.kafka:kafka-streams-test-utils:$kafkaVersion"
-		api "org.apache.kafka:kafka_$scalaVersion:$kafkaVersion"
-		api "org.apache.kafka:kafka_$scalaVersion:$kafkaVersion:test"
-		api 'org.junit.jupiter:junit-jupiter-api'
-		optionalApi "org.hamcrest:hamcrest-core:$hamcrestVersion"
-		optionalApi "org.mockito:mockito-core:$mockitoVersion"
-		optionalApi ("junit:junit:$junit4Version") {
-			exclude group: 'org.hamcrest', module: 'hamcrest-core'
-		}
-		optionalApi "org.apache.logging.log4j:log4j-core:$log4jVersion"
-	}
-}
-
-project ('spring-kafka-docs') {
-	description = 'Spring Kafka Code Snippets For Docs'
-
-	dependencies {
-		api "org.springframework.boot:spring-boot-starter:$springBootVersion"
-		api project (':spring-kafka')
-		optionalApi 'org.jetbrains.kotlin:kotlin-stdlib'
-		optionalApi 'com.fasterxml.jackson.core:jackson-core'
-		optionalApi 'com.fasterxml.jackson.core:jackson-databind'
-	}
-
-	compileKotlin {
-		kotlinOptions {
-			jvmTarget = '1.8'
-		}
-	}
-
-	sonarqube {
-		skipProject = true
-	}
-
-}
+//project ('spring-kafka-docs') {
+//	description = 'Spring Kafka Code Snippets For Docs'
+//
+//	dependencies {
+//		api "org.springframework.boot:spring-boot-starter:$springBootVersion"
+//		api project (':spring-kafka')
+//		optionalApi 'org.jetbrains.kotlin:kotlin-stdlib'
+//		optionalApi 'com.fasterxml.jackson.core:jackson-core'
+//		optionalApi 'com.fasterxml.jackson.core:jackson-databind'
+//	}
+//
+//	compileKotlin {
+//		kotlinOptions {
+//			jvmTarget = '1.8'
+//		}
+//	}
+//
+//	sonarqube {
+//		skipProject = true
+//	}
+//
+//}
 
 sonarqube {
 	properties {
@@ -394,183 +397,183 @@ sonarqube {
 	}
 }
 
-configurations {
-	docs
-}
+//configurations {
+//	docs
+//}
 
-dependencies {
-	docs "io.spring.docresources:spring-doc-resources:${docResourcesVersion}@zip"
-}
-
-task prepareAsciidocBuild(type: Sync) {
-	dependsOn configurations.docs
-	from {
-		configurations.docs.collect { zipTree(it) }
-	}
-	from 'spring-kafka-docs/src/main/asciidoc/','spring-kafka-docs/src/main/java','spring-kafka-docs/src/main/kotlin'
-	into "$buildDir/asciidoc"
-}
-
-asciidoctorPdf {
-	dependsOn prepareAsciidocBuild
-	baseDirFollowsSourceFile()
-	configurations 'asciidoctorExt'
-
-	asciidoctorj {
-		sourceDir "$buildDir/asciidoc"
-		inputs.dir(sourceDir)
-		sources {
-			include 'index.adoc'
-		}
-		options doctype: 'book'
-		attributes 'icons': 'font',
-		'sectanchors': '',
-		'sectnums': '',
-		'toc': '',
-		'source-highlighter' : 'coderay',
-		revnumber: project.version,
-		'project-version': project.version
-	}
-}
-
-asciidoctorj {
-	version = '2.4.1'
-	// fatalWarnings ".*"
-	options doctype: 'book', eruby: 'erubis'
-	attributes([
-			icons: 'font',
-			idprefix: '',
-			idseparator: '-',
-			docinfo: 'shared',
-			revnumber: project.version,
-			sectanchors: '',
-			sectnums: '',
-			'source-highlighter': 'highlight.js',
-			highlightjsdir: 'js/highlight',
-			'highlightjs-theme': 'googlecode',
-			stylesdir: 'css/',
-			stylesheet: 'stylesheet.css',
-			'spring-version': project.version,
-			'project-version': project.version,
-			'java-examples': 'org/springframework/kafka/jdocs',
-			'kotlin-examples': 'org/springframework/kafka/kdocs'
-	])
-}
-
-asciidoctor {
-	dependsOn asciidoctorPdf
-	baseDirFollowsSourceFile()
-	configurations 'asciidoctorExt'
-	sourceDir = file("$buildDir/asciidoc")
-	sources {
-		include '*.adoc'
-	}
-	resources {
-		from(sourceDir) {
-			include 'images/*', 'css/**', 'js/**'
-		}
-	}
-
-}
-
-task reference(dependsOn: asciidoctor) {
-	group = 'Documentation'
-	description = 'Generate the reference documentation'
-}
-
-reference.onlyIf { "$System.env.NO_REFERENCE_TASK" != 'true' || project.hasProperty('ignoreEnvToStopReference') }
-
-task api(type: Javadoc) {
-	group = 'Documentation'
-	description = 'Generates aggregated Javadoc API documentation.'
-	title = "${rootProject.description} ${version} API"
-	options.memberLevel = org.gradle.external.javadoc.JavadocMemberLevel.PROTECTED
-	options.author = true
-	options.header = rootProject.description
-	options.overview = 'src/api/overview.html'
-
-	source subprojects.collect { project ->
-		project.sourceSets.main.allJava
-	}
-
-	classpath = files(subprojects.collect { project ->
-		project.sourceSets.main.compileClasspath
-	})
-	destinationDir = new File(buildDir, 'api')
-}
-
-task docsZip(type: Zip, dependsOn: [reference]) {
-	group = 'Distribution'
-	archiveClassifier = 'docs'
-	description = "Builds -${archiveClassifier} archive containing api and reference " +
-			"for deployment at static.spring.io/spring-kafka/docs."
-
-	from('src/dist') {
-		include 'changelog.txt'
-	}
-
-	from(api) {
-		into 'api'
-	}
-
-	from ('build/docs/asciidoc') {
-		into 'reference/html'
-	}
-
-	from ('build/docs/asciidocPdf') {
-		include 'index.pdf'
-		rename 'index.pdf', 'spring-kafka-reference.pdf'
-		into 'reference/pdf'
-	}
-}
-
-task distZip(type: Zip, dependsOn: [docsZip]) { //, schemaZip]) {
-	group = 'Distribution'
-	archiveClassifier = 'dist'
-	description = "Builds -${archiveClassifier} archive, containing all jars and docs, " +
-			"suitable for community download page."
-
-	ext.baseDir = "${project.name}-${project.version}"
-
-	from('src/dist') {
-		include 'readme.txt'
-		include 'license.txt'
-		include 'notice.txt'
-		into "${baseDir}"
-	}
-
-	from(zipTree(docsZip.archivePath)) {
-		into "${baseDir}/docs"
-	}
-
-	subprojects.each { subproject ->
-		into ("${baseDir}/libs") {
-			from subproject.jar
-			from subproject.sourcesJar
-			from subproject.javadocJar
-		}
-	}
-}
-
-artifacts {
-	archives distZip
-	archives docsZip
-}
-
-task dist(dependsOn: assemble) {
-	group = 'Distribution'
-	description = 'Builds -dist, -docs distribution archives.'
-}
-
-apply from: "${rootProject.projectDir}/publish-maven.gradle"
-
-publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			artifact docsZip
-			artifact distZip
-		}
-	}
-}
-
-apply from: "${rootDir}/gradle/docs.gradle"
+//dependencies {
+//	docs "io.spring.docresources:spring-doc-resources:${docResourcesVersion}@zip"
+//}
+//
+//task prepareAsciidocBuild(type: Sync) {
+//	dependsOn configurations.docs
+//	from {
+//		configurations.docs.collect { zipTree(it) }
+//	}
+//	from 'spring-kafka-docs/src/main/asciidoc/','spring-kafka-docs/src/main/java','spring-kafka-docs/src/main/kotlin'
+//	into "$buildDir/asciidoc"
+//}
+//
+//asciidoctorPdf {
+//	dependsOn prepareAsciidocBuild
+//	baseDirFollowsSourceFile()
+//	configurations 'asciidoctorExt'
+//
+//	asciidoctorj {
+//		sourceDir "$buildDir/asciidoc"
+//		inputs.dir(sourceDir)
+//		sources {
+//			include 'index.adoc'
+//		}
+//		options doctype: 'book'
+//		attributes 'icons': 'font',
+//		'sectanchors': '',
+//		'sectnums': '',
+//		'toc': '',
+//		'source-highlighter' : 'coderay',
+//		revnumber: project.version,
+//		'project-version': project.version
+//	}
+//}
+//
+//asciidoctorj {
+//	version = '2.4.1'
+//	// fatalWarnings ".*"
+//	options doctype: 'book', eruby: 'erubis'
+//	attributes([
+//			icons: 'font',
+//			idprefix: '',
+//			idseparator: '-',
+//			docinfo: 'shared',
+//			revnumber: project.version,
+//			sectanchors: '',
+//			sectnums: '',
+//			'source-highlighter': 'highlight.js',
+//			highlightjsdir: 'js/highlight',
+//			'highlightjs-theme': 'googlecode',
+//			stylesdir: 'css/',
+//			stylesheet: 'stylesheet.css',
+//			'spring-version': project.version,
+//			'project-version': project.version,
+//			'java-examples': 'org/springframework/kafka/jdocs',
+//			'kotlin-examples': 'org/springframework/kafka/kdocs'
+//	])
+//}
+//
+//asciidoctor {
+//	dependsOn asciidoctorPdf
+//	baseDirFollowsSourceFile()
+//	configurations 'asciidoctorExt'
+//	sourceDir = file("$buildDir/asciidoc")
+//	sources {
+//		include '*.adoc'
+//	}
+//	resources {
+//		from(sourceDir) {
+//			include 'images/*', 'css/**', 'js/**'
+//		}
+//	}
+//
+//}
+//
+//task reference(dependsOn: asciidoctor) {
+//	group = 'Documentation'
+//	description = 'Generate the reference documentation'
+//}
+//
+//reference.onlyIf { "$System.env.NO_REFERENCE_TASK" != 'true' || project.hasProperty('ignoreEnvToStopReference') }
+//
+//task api(type: Javadoc) {
+//	group = 'Documentation'
+//	description = 'Generates aggregated Javadoc API documentation.'
+//	title = "${rootProject.description} ${version} API"
+//	options.memberLevel = org.gradle.external.javadoc.JavadocMemberLevel.PROTECTED
+//	options.author = true
+//	options.header = rootProject.description
+//	options.overview = 'src/api/overview.html'
+//
+//	source subprojects.collect { project ->
+//		project.sourceSets.main.allJava
+//	}
+//
+//	classpath = files(subprojects.collect { project ->
+//		project.sourceSets.main.compileClasspath
+//	})
+//	destinationDir = new File(buildDir, 'api')
+//}
+//
+//task docsZip(type: Zip, dependsOn: [reference]) {
+//	group = 'Distribution'
+//	archiveClassifier = 'docs'
+//	description = "Builds -${archiveClassifier} archive containing api and reference " +
+//			"for deployment at static.spring.io/spring-kafka/docs."
+//
+//	from('src/dist') {
+//		include 'changelog.txt'
+//	}
+//
+//	from(api) {
+//		into 'api'
+//	}
+//
+//	from ('build/docs/asciidoc') {
+//		into 'reference/html'
+//	}
+//
+//	from ('build/docs/asciidocPdf') {
+//		include 'index.pdf'
+//		rename 'index.pdf', 'spring-kafka-reference.pdf'
+//		into 'reference/pdf'
+//	}
+//}
+//
+//task distZip(type: Zip, dependsOn: [docsZip]) { //, schemaZip]) {
+//	group = 'Distribution'
+//	archiveClassifier = 'dist'
+//	description = "Builds -${archiveClassifier} archive, containing all jars and docs, " +
+//			"suitable for community download page."
+//
+//	ext.baseDir = "${project.name}-${project.version}"
+//
+//	from('src/dist') {
+//		include 'readme.txt'
+//		include 'license.txt'
+//		include 'notice.txt'
+//		into "${baseDir}"
+//	}
+//
+//	from(zipTree(docsZip.archivePath)) {
+//		into "${baseDir}/docs"
+//	}
+//
+//	subprojects.each { subproject ->
+//		into ("${baseDir}/libs") {
+//			from subproject.jar
+//			from subproject.sourcesJar
+//			from subproject.javadocJar
+//		}
+//	}
+//}
+//
+//artifacts {
+//	archives distZip
+//	archives docsZip
+//}
+//
+//task dist(dependsOn: assemble) {
+//	group = 'Distribution'
+//	description = 'Builds -dist, -docs distribution archives.'
+//}
+//
+//apply from: "${rootProject.projectDir}/publish-maven.gradle"
+//
+//publishing {
+//	publications {
+//		mavenJava(MavenPublication) {
+//			artifact docsZip
+//			artifact distZip
+//		}
+//	}
+//}
+//
+//apply from: "${rootDir}/gradle/docs.gradle"

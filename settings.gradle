@@ -19,5 +19,5 @@ gradleEnterprise {
 rootProject.name = 'spring-kafka-dist'
 
 include 'spring-kafka'
-include 'spring-kafka-test'
-include 'spring-kafka-docs'
+//include 'spring-kafka-test'
+//include 'spring-kafka-docs'
