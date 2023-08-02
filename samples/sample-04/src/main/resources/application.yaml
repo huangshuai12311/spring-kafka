@@ -1,0 +1,48 @@
+# 应用服务 WEB 访问端口
+server:
+  port: 58080
+
+
+spring:
+  # Kafka配置
+  kafka:
+    # 集群配置
+    bootstrap-servers: localhost:9092
+    # 生产者配置
+    producer:
+      # 重试次数
+      retries: 3
+      # ack（可选0、1、all/-1）
+      acks: 1
+      # 批量大小（字节）
+      batch-size: 1024
+      # 提交延时（ms）
+      linger: 1000
+      # 缓冲区大小（默认32M）
+      buffer-memory: 40960
+
+        # 消费者配置
+    consumer:
+          # 消费者组
+          group-id: groupA
+          # 自动提交
+          enable-auto-commit: false
+          # 当没有初始offset或offset超出范围时该如何设置offset
+          # latest表示只消费新产生的数据，earliest表示从头开始消费，none表示抛出异常
+          auto-offset-reset: earliest
+          # 每次消费多少条消息
+          max-poll-records: 1
+
+#Apollo 配置
+app:
+  id: kafka-sdk
+  #应用ID
+apollo:
+  cluster: default                           #指定使用哪个集群的配置
+  meta: http://localhost:8080            #DEV环境配置中心地址
+  autoUpdateInjectedSpringProperties: true   #是否开启 Spring 参数自动更新
+  bootstrap:
+    enabled: true                            #是否开启 Apollo
+    namespaces: TEST2.my_namespace           #设置 Namespace
+    eagerLoad:
+      enabled: false                         #将 Apollo 加载提到初始化日志系统之前

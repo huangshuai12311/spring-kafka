@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Properties;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
@@ -32,6 +33,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiPredicate;
 import java.util.function.Supplier;
 
+import com.netease.paas.kafka.producer.KafkaProducerCreator;
 import org.apache.commons.logging.LogFactory;
 import org.apache.kafka.clients.consumer.ConsumerGroupMetadata;
 import org.apache.kafka.clients.consumer.OffsetAndMetadata;
@@ -860,11 +862,19 @@ public class DefaultKafkaProducerFactory<K, V> extends KafkaResourceFactory
 
 	protected Producer<K, V> createRawProducer(Map<String, Object> rawConfigs) {
 		Producer<K, V> kafkaProducer =
-				new KafkaProducer<>(rawConfigs, this.keySerializerSupplier.get(), this.valueSerializerSupplier.get());
+				new KafkaProducerCreator(convertMapToProperties(rawConfigs));
 		for (ProducerPostProcessor<K, V> pp : this.postProcessors) {
 			kafkaProducer = pp.apply(kafkaProducer);
 		}
 		return kafkaProducer;
+	}
+
+	public static Properties convertMapToProperties(Map<String, Object> map) {
+		Properties properties = new Properties();
+		for (Map.Entry<String, Object> entry : map.entrySet()) {
+			properties.setProperty(entry.getKey(), (String) entry.getValue());
+		}
+		return properties;
 	}
 
 	@Nullable

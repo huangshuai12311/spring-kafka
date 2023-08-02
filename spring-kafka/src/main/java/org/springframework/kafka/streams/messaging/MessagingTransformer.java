@@ -78,9 +78,8 @@ public class MessagingTransformer<K, V, R> implements Transformer<K, V, KeyValue
 		ConsumerRecord<Object, Object> record = new ConsumerRecord<Object, Object>(this.processorContext.topic(),
 				this.processorContext.partition(), this.processorContext.offset(),
 				this.processorContext.timestamp(), TimestampType.NO_TIMESTAMP_TYPE,
-				0, 0,
-				key, value,
-				headers, Optional.empty());
+				0, 0,0,
+				key, value);
 		Message<?> message = this.converter.toMessage(record, null, null, null);
 		message = this.function.exchange(message);
 		List<String> headerList = new ArrayList<>();

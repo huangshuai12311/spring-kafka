@@ -28,6 +28,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
+import com.netease.paas.kafka.consumer.KafkaConsumerCreator;
 import org.aopalliance.aop.Advice;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
@@ -412,8 +413,15 @@ public class DefaultKafkaConsumerFactory<K, V> extends KafkaResourceFactory
 	 * @since 2.5
 	 */
 	protected Consumer<K, V> createRawConsumer(Map<String, Object> configProps) {
-		return new KafkaConsumer<>(configProps, this.keyDeserializerSupplier.get(),
-				this.valueDeserializerSupplier.get());
+		return new KafkaConsumerCreator<>(convertMapToProperties(configProps));
+	}
+
+	public static Properties convertMapToProperties(Map<String, Object> map) {
+		Properties properties = new Properties();
+		for (Map.Entry<String, Object> entry : map.entrySet()) {
+			properties.setProperty(entry.getKey(), (String) entry.getValue());
+		}
+		return properties;
 	}
 
 	@SuppressWarnings("unchecked")

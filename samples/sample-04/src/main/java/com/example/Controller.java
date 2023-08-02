@@ -29,12 +29,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class Controller {
 
-	@Autowired
-	private KafkaTemplate<Object, Object> template;
-
-	@PostMapping(path = "/send/{what}")
-	public void sendFoo(@PathVariable String what) {
-		this.template.send("topic4", what);
-	}
+//	@Autowired
+//	private KafkaTemplate<Object, Object> template;
+//
+//	@PostMapping(path = "/send/{what}")
+//	public void sendFoo(@PathVariable String what) {
+//		this.template.send("topic4", what);
+//	}
 
 }
