@@ -53,47 +53,47 @@ public class Application {
 		SpringApplication.run(Application.class, args);
 	}
 
-	@Bean
-	public ConcurrentKafkaListenerContainerFactory<?, ?> kafkaListenerContainerFactory(
-			ConcurrentKafkaListenerContainerFactoryConfigurer configurer,
-			ConsumerFactory<Object, Object> kafkaConsumerFactory,
-			KafkaTemplate<Object, Object> template) {
-		ConcurrentKafkaListenerContainerFactory<Object, Object> factory = new ConcurrentKafkaListenerContainerFactory<>();
-		configurer.configure(factory, kafkaConsumerFactory);
-		factory.setBatchListener(true);
-		factory.setMessageConverter(batchConverter());
-		return factory;
-	}
-
-	@Bean
-	public RecordMessageConverter converter() {
-		return new StringJsonMessageConverter();
-	}
-
-	@Bean
-	public BatchMessagingMessageConverter batchConverter() {
-		return new BatchMessagingMessageConverter(converter());
-	}
-
-	@Autowired
-	private KafkaTemplate<String, String> kafkaTemplate;
-
-	@KafkaListener(id = "fooGroup2", topics = "topic2")
-	public void listen1(List<Foo2> foos) throws IOException {
-		logger.info("Received: " + foos);
-		foos.forEach(f -> kafkaTemplate.send("topic3", f.getFoo().toUpperCase()));
-		logger.info("Messages sent, hit Enter to commit tx");
-		System.in.read();
-	}
-
-	@KafkaListener(id = "fooGroup3", topics = "topic3")
-	public void listen2(List<String> in) {
-		logger.info("Received: " + in);
-	}
-
-	@Bean
-	public NewTopic topic() {
-		return new NewTopic("topic2", 1, (short) 1);
-	}
+//	@Bean
+//	public ConcurrentKafkaListenerContainerFactory<?, ?> kafkaListenerContainerFactory(
+//			ConcurrentKafkaListenerContainerFactoryConfigurer configurer,
+//			ConsumerFactory<Object, Object> kafkaConsumerFactory,
+//			KafkaTemplate<Object, Object> template) {
+//		ConcurrentKafkaListenerContainerFactory<Object, Object> factory = new ConcurrentKafkaListenerContainerFactory<>();
+//		configurer.configure(factory, kafkaConsumerFactory);
+//		factory.setBatchListener(true);
+//		factory.setMessageConverter(batchConverter());
+//		return factory;
+//	}
+//
+//	@Bean
+//	public RecordMessageConverter converter() {
+//		return new StringJsonMessageConverter();
+//	}
+//
+//	@Bean
+//	public BatchMessagingMessageConverter batchConverter() {
+//		return new BatchMessagingMessageConverter(converter());
+//	}
+//
+//	@Autowired
+//	private KafkaTemplate<String, String> kafkaTemplate;
+//
+//	@KafkaListener(id = "fooGroup2", topics = "topic2")
+//	public void listen1(List<Foo2> foos) throws IOException {
+//		logger.info("Received: " + foos);
+//		foos.forEach(f -> kafkaTemplate.send("topic3", f.getFoo().toUpperCase()));
+//		logger.info("Messages sent, hit Enter to commit tx");
+//		System.in.read();
+//	}
+//
+//	@KafkaListener(id = "fooGroup3", topics = "topic3")
+//	public void listen2(List<String> in) {
+//		logger.info("Received: " + in);
+//	}
+//
+//	@Bean
+//	public NewTopic topic() {
+//		return new NewTopic("topic2", 1, (short) 1);
+//	}
 
 }

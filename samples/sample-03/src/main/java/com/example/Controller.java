@@ -32,17 +32,17 @@ import com.common.Foo1;
 @RestController
 public class Controller {
 
-	@Autowired
-	private KafkaTemplate<Object, Object> template;
-
-	@PostMapping(path = "/send/foos/{what}")
-	public void sendFoo(@PathVariable String what) {
-		this.template.executeInTransaction(kafkaTemplate -> {
-			StringUtils.commaDelimitedListToSet(what).stream()
-				.map(s -> new Foo1(s))
-				.forEach(foo -> kafkaTemplate.send("topic2", foo));
-			return null;
-		});
-	}
+//	@Autowired
+//	private KafkaTemplate<Object, Object> template;
+//
+//	@PostMapping(path = "/send/foos/{what}")
+//	public void sendFoo(@PathVariable String what) {
+//		this.template.executeInTransaction(kafkaTemplate -> {
+//			StringUtils.commaDelimitedListToSet(what).stream()
+//				.map(s -> new Foo1(s))
+//				.forEach(foo -> kafkaTemplate.send("topic2", foo));
+//			return null;
+//		});
+//	}
 
 }

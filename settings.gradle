@@ -1,4 +1,3 @@
 rootProject.name = 'spring-kafka-dist'
 
 include 'spring-kafka'
-include 'spring-kafka-test'
