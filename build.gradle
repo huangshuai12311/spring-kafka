@@ -398,9 +398,9 @@ configurations {
 	docs
 }
 
-dependencies {
-	docs "io.spring.docresources:spring-doc-resources:${docResourcesVersion}@zip"
-}
+//dependencies {
+//	docs "io.spring.docresources:spring-doc-resources:${docResourcesVersion}@zip"
+//}
 
 task prepareAsciidocBuild(type: Sync) {
 	dependsOn configurations.docs
