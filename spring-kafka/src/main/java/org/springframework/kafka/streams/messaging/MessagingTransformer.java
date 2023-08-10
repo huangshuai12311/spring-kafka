@@ -75,11 +75,8 @@ public class MessagingTransformer<K, V, R> implements Transformer<K, V, KeyValue
 	@Override
 	public KeyValue<K, R> transform(K key, V value) {
 		Headers headers = this.processorContext.headers();
-		ConsumerRecord<Object, Object> record = new ConsumerRecord<Object, Object>(this.processorContext.topic(),
-				this.processorContext.partition(), this.processorContext.offset(),
-				this.processorContext.timestamp(), TimestampType.NO_TIMESTAMP_TYPE,
-				0, 0,0,
-				key, value);
+		ConsumerRecord<Object, Object> record = new ConsumerRecord<>(this.processorContext.topic(),
+				this.processorContext.partition(), this.processorContext.offset(), key, value);
 		Message<?> message = this.converter.toMessage(record, null, null, null);
 		message = this.function.exchange(message);
 		List<String> headerList = new ArrayList<>();

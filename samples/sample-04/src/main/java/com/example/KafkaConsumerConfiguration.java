@@ -22,6 +22,8 @@ import java.util.Map;
 @Configuration
 public class KafkaConsumerConfiguration {
 
+	public static final String NAMESPACE_KEY = "apollo.namespace";
+
 	@Value("${spring.kafka.bootstrap-servers}")
 	private String servers;
 
@@ -49,7 +51,7 @@ public class KafkaConsumerConfiguration {
 		props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, maxPollRecords);
 		props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
 		props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
-		props.put("apollo.namespace","TEST2.my_namespace");
+		props.put(NAMESPACE_KEY,"TEST2.my_namespace");
 		return props;
 	}
 

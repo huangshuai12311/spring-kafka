@@ -18,7 +18,9 @@ import java.util.Map;
  * @create 2023-08-02-11:20
  */
 @Configuration
-public class KafkaConfiguration {
+public class KafkaProducerConfiguration {
+	public static final String NAMESPACE_KEY = "apollo.namespace";
+
 	// 服务器地址
 	@Value("${spring.kafka.bootstrap-servers}")
 	private String servers;
@@ -57,7 +59,7 @@ public class KafkaConfiguration {
 		props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, bufferMemory);
 		props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
 		props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-		props.put("apollo.namespace","TEST2.my_namespace");
+		props.put(NAMESPACE_KEY,"TEST2.my_namespace");
 		return props;
 	}
 
