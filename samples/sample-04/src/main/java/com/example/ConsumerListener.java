@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class ConsumerListener {
-	@KafkaListener(topics = {"test-topic"})
+	@KafkaListener(topicPattern = ".*" + "\\.test-topic" + "|" + "test-topic")
 	public void consumer(String record, Acknowledgment ack) throws InterruptedException {
 		Thread.sleep(2000);
 		String threadName = Thread.currentThread().getName();

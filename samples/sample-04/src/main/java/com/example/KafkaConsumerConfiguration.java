@@ -22,36 +22,19 @@ import java.util.Map;
 @Configuration
 public class KafkaConsumerConfiguration {
 
-	public static final String NAMESPACE_KEY = "apollo.namespace";
-
-	@Value("${spring.kafka.bootstrap-servers}")
-	private String servers;
-
 	@Value("${spring.kafka.consumer.group-id}")
 	private String groupId;
 
-	@Value("${spring.kafka.consumer.enable-auto-commit}")
-	private boolean autoCommit;
-
-	@Value("${spring.kafka.consumer.auto-offset-reset}")
-	private String latest;
-
-	@Value("${spring.kafka.consumer.max-poll-records}")
-	private String maxPollRecords;
 
 	/**
 	 * 自定义配置
 	 */
 	public Map<String, Object> consumerConfigs() {
 		Map<String, Object> props = new HashMap<>();
-		props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, servers);
 		props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
-		props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
-		props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, latest);
-		props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, maxPollRecords);
 		props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
 		props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
-		props.put(NAMESPACE_KEY,"TEST2.my_namespace");
+		props.put(CommonConfiguration.NAMESPACE_KEY, new CommonConfiguration().getApolloNamespace());
 		return props;
 	}
 

@@ -1,8 +1,6 @@
 package com.example;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,16 +16,15 @@ import javax.annotation.Resource;
 @RestController
 public class ProducerController {
 
-	@Qualifier(value = "kafkaTemplate1")
 	@Resource
-	private KafkaTemplate<String, Object> kafkaTemplate1;
+	private KafkaTemplate<String, Object> kafkaTemplate;
 
 
 	@RequestMapping("/send")
 	public String sendMessage(@RequestParam("value") String value) {
 		System.out.println("dffff");
 		try {
-			kafkaTemplate1.send("test-topic", value);
+			kafkaTemplate.send("test-topic", value);
 			return "发送成功";
 		} catch (Exception e) {
 			log.error("Failed to send message caused by {}", e.getMessage());
